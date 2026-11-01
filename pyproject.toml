@@ -1,6 +1,6 @@
 [project]
 name = "simple-x-forwarded-for-chain"
-version = "0.1.0"
+version = "0.1.1"
 description = "Extracts direct and proxy addresses from X-Forwarded-For headers with trusted-proxy filtering."
 requires-python = ">=3.10"
 dependencies = []
