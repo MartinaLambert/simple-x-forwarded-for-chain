@@ -27,3 +27,10 @@ This library does only that. It does not integrate with any web framework, it do
 Address tokens are validated structurally, not via `ipaddress`, because real-world XFF values include bracketed IPv6 (`[2001:db8::1]`) which `ipaddress` rejects. The library accepts bracketed and bare IPv6 and passes them through unchanged; it is up to you to normalise them if your downstream consumer cares. Malformed tokens (anything containing characters outside hex digits, dots, colons, and brackets) are silently dropped from the chain rather than raising, because raising on a single bad hop would discard the rest of a otherwise useful header.
 
 Trusted-proxy matching is an exact, case-sensitive string comparison. The chain is walked from the right: each address whose right-hand peer is trusted is stripped, and the walk stops at the first untrusted peer. The remaining list (which may contain more than one address when an untrusted proxy is in the middle of the chain) is returned in original left-to-right order.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
